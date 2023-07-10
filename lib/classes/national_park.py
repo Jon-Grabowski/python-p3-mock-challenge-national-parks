@@ -19,14 +19,27 @@ class NationalPark:
         
     def trips(self, new_trip=None):
         from classes.trip import Trip
-        pass
+        return [trip for trip in Trip.all if trip.national_park == self and isinstance(trip, Trip)]
     
     def visitors(self, new_visitor=None):
         from classes.visitor import Visitor
-        pass
+        visitor_list = [trip.visitor for trip in self.trips() if isinstance(trip.visitor, Visitor)]
+        self._visitors = visitor_list
+        return list(set(visitor_list))
     
     def total_visits(self):
-        pass
+        return len(self.trips())
     
     def best_visitor(self):
-        pass
+        from classes.visitor import Visitor
+        most_trips = 0
+        top_visitor = Visitor
+        for visitor in self.visitors() :
+            count = 0
+            for trips in visitor.trips() :
+                if trips.national_park == self :
+                    count += 1
+            if most_trips < count :
+                most_trips = count
+                top_visitor = visitor
+        return top_visitor

@@ -20,8 +20,10 @@ class Visitor:
 
     def trips(self, new_trip=None):
         from classes.trip import Trip
-        pass
+        return [trip for trip in Trip.all if trip.visitor == self and isinstance(trip, Trip)]
     
     def national_parks(self, new_national_park=None):
         from classes.national_park import NationalPark
-        pass 
+        park_list = [trip.national_park for trip in self.trips() if isinstance(trip.national_park, NationalPark)]
+        filter_list = set(park_list)
+        return list(filter_list)
